@@ -137,7 +137,14 @@ int user_reinforce()
 	system("cls");
 	printf("강화중...");
 
-	if (Data[0] < 6 && Data[1]>149)
+	if(Data[1]<150)
+	{
+		printf("\n\n\n ※골드가 부족합니다.");
+		_getch();
+		 reinforce_interface();
+	}
+	
+	else if (Data[0] < 6 && Data[1]>149)
 	{
 		reinforce_5();
 		Data[1] = Data[1]-150;
@@ -168,12 +175,6 @@ int user_reinforce()
 		printf("\n\n ※이미 강화가 완료된 무기입니다. \n 다음 컨텐츠를 기다려 주시기 바랍니다. \t\t\t현재 무기 : %d강\n\n", Data[0]);
 		_getch();
 		reinforce_interface();
-	}
-	
-	else if (Data[1]<149){
-		printf("\n\n\n ※골드가 부족합니다.");
-		_getch();
-		 reinforce_interface();
 	}
 	printf("\n계속 하시려면 엔터를 누르시면 되고 그만 하시려면 1번을 누르고 엔터를 눌러주세요");
 	input = _getch();
@@ -244,6 +245,8 @@ int save()
 	fwrite(&Data, sizeof(Data), 1, fp);
 	fclose(fp);
 	
+	
+	printf("완료 되었습니다.\n\n");
 	_getch();
 	reinforce_interface();
 }
@@ -607,10 +610,10 @@ int gacha()
 }
 int setting()
 {
-	char input;
+	char input, input1;
 	printf("┌──────설정──────┐\n");
-	printf("│    1. 강화 이펙트 on/off   │\n");
-	printf("│         2. 나가기          │\n");
+	printf("│   1. 강화 이펙트 on/off    │\n");
+	printf("│         2. 초기화          │\n");
 	printf("│      번호를 눌러주세요     │\n");
 	printf("└──────────────┘\n");
 
@@ -630,6 +633,33 @@ int setting()
 			
 		}
 		 break;
+		 
+	case '2' : 
+		printf("┌─────초기화──────┐\n");
+		printf("│ 정말 초기화 하시겠습니까?  │\n");
+		printf("│        ( Y / N )           │\n");
+		printf("└──────────────┘\n");
+		
+		input1 = _getch();
+		
+		if(input1 == 'y' || 'Y')
+		{
+			printf("\n초기화 되었습니다. 초기화 된 데이터를 저장 합니다.");
+			Data[0] = 0;
+			Data[1] = 2000;
+			Data[2] = 0;
+			Data[3] = 0;
+			
+			Sleep(2000);
+			save();
+		}
+		
+		else
+		{
+			printf("즐거운 시간 보내세요!\n");
+			Sleep(2000);
+			reinforce_interface();
+		}
 	default:
 		reinforce_interface();
 		break;
