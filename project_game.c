@@ -23,14 +23,14 @@ int setting();
 int effect_off_user_reinforce();
 
 
-int Data[4] = { 0, 2000, 0, 0 };			//강화, 골드, 이펙트 on/off, 자동 강화권 
+int Data[7] = { 0, 2000, 0, 0, 0, 0, 0};			//강화, 골드, 이펙트 on/off, 자동 강화권 , 은행 대출, 은행 저축, 강화 시도 횟수 
 
 
 
 int main(void)
 {
 
-	FILE *fp = fopen("sava.dat", "rb");
+	FILE *fp = fopen("save.dat", "rb");
 	if (fp == NULL) {
 		start();
 	}
@@ -44,6 +44,7 @@ int start()
 {
 	srand((unsigned)time(NULL));
 
+	system("cls");
 	printf("┌────────────────────┐\n");
 	printf("│  강화 시스템에 오신 것을 환영 합니다.  │\n");
 	printf("│  시작하시려면 아무것이나 눌러주세요.   │\n");
@@ -66,15 +67,16 @@ int reinforce_interface()
 	printf("☆         2번 자동 강화 아이템 사용          ★\n");
 	printf("★        3번 지금까지의 데이터를 저장        ☆\n");
 	printf("☆      4번 현재 자신의 무기 확인, 경매소     ★\n");
-	printf("★               5번 게임 종료                ☆\n");
+	printf("★            5번 은행 대출, 저축             ☆\n");
 	printf("☆               6번 확률 확인                ★\n");
 	printf("★              7번 무기 초기화               ☆\n");
-	printf("☆                 0번 설정                   ★\n");
+	printf("☆                 9번 설정                   ★\n");
+	printf("★               0번 게임 종료                ☆\n");
 	printf("★   번호를 입력하시고 엔터를 눌러주세요.     ☆\n");
 	printf("☆                                            ★\n");
 	printf("★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆\n");
 
-	scanf("%s", &menu);
+	menu = getch();
 
 	switch (menu)
 	{
@@ -89,16 +91,17 @@ int reinforce_interface()
 	case '3': save(); break;
 
 	case '4': weapon(); break;
-	case '5': turn_off(); break;
+	case '0': turn_off(); break;
 	case '6': gacha(); break;
 	case '7': Data[0] = 0; reinforce_interface(); break;
-	case '0': setting(); break;
+	case '9': setting(); break;
+	case '5': bank(); break;
 
 	default:
 		printf("잘못 입력하셨습니다. 다시 입력하시겠습니까? (N을 입력시 게임이 종료 됩니다.)Y/N");
 		scanf("%s", &menu);
-		if (menu == 'Y')
-			reinforce_interface();
+		if (menu == 'Y' || 'y')
+			start();
 		else
 			return 0;
 		break;
@@ -108,7 +111,8 @@ int reinforce_interface()
 
 int user_reinforce()
 {
-	char input;
+	char input1;
+	char input2;
 	system("cls");
 
 	printf("★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆\n");
@@ -117,13 +121,13 @@ int user_reinforce()
 	printf("☆      총 20강까지 있으며 강화 중 특별한 아이템이 나옵니다.      ★\n");
 	printf("★               12강 부터는 파괴확률이 생깁니다.                 ☆\n");
 	printf("☆   파괴시에는 100골드를 주고 9강부터 다시 강화 할 수 있습니다.  ★\n");
-	printf("★              강화를 하시려면 엔터를 눌러주세요!                ☆\n");
+	printf("★              강화를 하시려면 아무거나 누르세요                 ☆\n");
 	printf("☆                  현재 강화 : %d 골드 : %d                     ★\n", Data[0], Data[1]);
 	printf("★                                                                ☆\n");
 	printf("☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★\n");
 
-	_getch();
-
+	getch();
+	
 	system("cls");
 	printf("강화중.");
 
@@ -135,38 +139,53 @@ int user_reinforce()
 	system("cls");
 	printf("강화중...");
 
-	if (Data[1]<150)
+	if (Data[1]<150 && Data[5]<150)
 	{
 		printf("\n\n\n ※골드가 부족합니다.");
+		Sleep(500);
 		_getch();
 		reinforce_interface();
 	}
 
-	else if (Data[0] < 6 )
+	else if (Data[0] < 6)
 	{
 		reinforce_5();
-		Data[1] = Data[1] - 150;
+		if(Data[1]>149)
+			Data[1] = Data[1] - 150;
+		if(Data[5]>149 && Data[1]<150)
+			Data[5] = Data[5] - 150;
+		Data[6]++;
 	}
 
 	else if (Data[0] < 12)
 	{
 		reinforce_11();
-		Data[1] = Data[1] - 150;
+		if(Data[1]>149)
+			Data[1] = Data[1] - 150;
+		if(Data[5]>149 && Data[1]<150)
+			Data[5] = Data[5] - 150;
+		Data[6]++;
 
 	}
 	else if (Data[0] < 17)
 	{
 		reinforce_16();
-		Data[1] = Data[1] - 150;
+		if(Data[1]>149)
+			Data[1] = Data[1] - 150;
+		if(Data[5]>149 && Data[1]<150)
+			Data[5] = Data[5] - 150;
+		Data[6]++;
 	}
 
 	else if (Data[0] < 20)
 	{
 		reinforce_20();
-		Data[1] = Data[1] - 150;
+		if(Data[1]>149)
+			Data[1] = Data[1] - 150;
+		if(Data[5]>149 && Data[1]<150)
+			Data[5] = Data[5] - 150;
+		Data[6]++;
 	}
-
-
 
 	else if (Data[0] >= 20)
 	{
@@ -175,13 +194,15 @@ int user_reinforce()
 		reinforce_interface();
 	}
 	printf("\n계속 하시려면 엔터를 누르시면 되고 그만 하시려면 1번을 누르고 엔터를 눌러주세요");
-	input = _getch();
-	if (input == '1')
+	input2 = _getch();
+	if (input2 == '1')
 	{
 		reinforce_interface();
 	}
-
-	user_reinforce();
+	else
+		user_reinforce();
+	
+	reinforce_interface();
 }
 int auto_reinforce()
 {
@@ -193,20 +214,22 @@ int auto_reinforce()
 	printf("★         강화하다가 나온 자동강화권을 사용할 수 있습니다.       ☆\n");
 	printf("☆            강화 중 특별한 아이템이 나오지 않습니다.            ★\n");
 	printf("★                 12강까지 강화 할 수 있습니다.                  ☆\n");
-	printf("☆         자동강화권과 자동강화 횟수당 50골드가 사용됩니다.      ★\n");
+	printf("☆         한 번 시도시 자동강화권과 10골드가 사용됩니다.         ★\n");
 	printf("★               강화를 하시려면 엔터를 눌러주세요!               ☆\n");
 	printf("☆           현재 강화 단계 : %d       자동강화권 : %d              ★\n", Data[0], Data[3]);
-	printf("★                                                                ☆\n");
+	if(Data[4] != 0)
+		printf("★             대출의 효과로 인해 확률이 낮아집니다.              ☆\n");
+	else
+	{
+		printf("★                                                                ☆\n");
+	}
 	printf("☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★\n");
 
 	_getch();
-
 	if (Data[3] != 0)
 	{
 		Data[3]--;
 		i = reinforce();
-
-
 		printf("%d", i);
 
 		_getch();
@@ -236,7 +259,7 @@ int save()
 
 	_getch();
 
-	FILE *fp = fopen("sava.dat", "wb");
+	FILE *fp = fopen("save.dat", "wb");
 	if (fp == NULL)
 		return 0;
 
@@ -264,7 +287,7 @@ int weapon_interface()
 
 int weapon()
 {
-	
+
 	char input;
 	int get_golds;
 	int Fates_dice = rand() % (150 + 1);
@@ -272,64 +295,73 @@ int weapon()
 	system("cls");
 
 	weapon_interface();
+
 	_getch();
-	
+
 	get_golds = (120 * Data[0]) + (Fates_dice*Data[0]);
-	
-		if (Fates_dice<51 && Data[0] !=0)
+
+	if (Fates_dice<51 && Data[0] != 0)
 	{
 		printf("\n\n경매장의 상인들이 당신의 무기에 관심이 없습니다.\n\n");
 		printf("사리스 || 경매장 관리\n");
 		printf("살 사람도 없는 것 같은데 이만 장사 접지 그래?\n");
 	}
-	else if (Fates_dice<101 && Data[0] !=0)
+	else if (Fates_dice<101 && Data[0] != 0)
 	{
 		printf("\n\n경매장의 상인들이 당신의 무기가 그럭저럭 이라고 말합니다.\n\n");
 		printf("윌리 || 상인\n");
 		printf("이 무기 그럭저럭인데 당신 작품인가? 나라면 이렇게 안할텐데..\n");
 	}
-		
-		 
-	else if (Fates_dice<151 && Data[0] !=0)
-		{
-			printf("\n\n경매장의 상인들 모두가 당신의 무기를 사고 싶어 합니다.\n\n");
-			printf("오필리아 || 확률 강화의 명인\n");
-			printf("당신 뭐죠...? 이렇게 강화에 재능이 있다니... 다음 무기, 기대할게요 〉〈\n");
-		}
-		
-		if (Data[0] == 0)
-		{
-			printf("\n\n팔면 %d골드가 나옵니다. 파는 중입니다.", get_golds);
-			Sleep(1000);
-			system("cls");
-			weapon_interface();
-			printf("\n\n팔면 %d골드가 나옵니다. 파는 중입니다..", get_golds);
-			Sleep(1000);
-			system("cls");
-			weapon_interface();
-			printf("\n\n팔면 %d골드가 나옵니다. 파는 중입니다...", get_golds );
-			Sleep(1000);
-			Data[0] = 0;
-			Data[1] = Data[1] + get_golds;
-			reinforce_interface();
-		}
-		else
-			{
-			Sleep(3000);
-			printf("\n팔면 %d골드가 나옵니다. 파는 중입니다.", get_golds);
-			Sleep(1000);
-			system("cls");
-			weapon_interface();
-			printf("\n팔면 %d골드가 나옵니다. 파는 중입니다..", get_golds);
-			Sleep(1000);
-			system("cls");
-			weapon_interface();
-			printf("\n팔면 %d골드가 나옵니다. 파는 중입니다...", get_golds);
-			Sleep(1000);
-			Data[0] = 0;
-			Data[1] = Data[1] + get_golds;
-		}
+
+
+	else if (Fates_dice<151 && Data[0] != 0)
+	{
+		printf("\n\n경매장의 상인들 모두가 당신의 무기를 사고 싶어 합니다.\n\n");
+		printf("오필리아 || 확률 강화의 명인\n");
+		printf("당신 뭐죠...? 이렇게 강화에 재능이 있다니... 다음 무기, 기대할게요 〉〈\n");
+	}
+
+	if (Data[0] == 0)
+	{
+		printf("\n\n팔면 %d골드가 나옵니다. 파는 중입니다.", get_golds);
+		Sleep(1000);
+		system("cls");
+		weapon_interface();
+		printf("\n\n팔면 %d골드가 나옵니다. 파는 중입니다..", get_golds);
+		Sleep(1000);
+		system("cls");
+		weapon_interface();
+		printf("\n\n팔면 %d골드가 나옵니다. 파는 중입니다...", get_golds);
+		Sleep(1000);
+		Data[0] = 0;
+		Data[1] = Data[1] + get_golds;
+		reinforce_interface();
+	}
+	else
+	{
+		Sleep(3000);
+		printf("\n팔면 %d골드가 나옵니다. 파는 중입니다.", get_golds);
+		Sleep(1000);
+		system("cls");
+		weapon_interface();
+		printf("\n팔면 %d골드가 나옵니다. 파는 중입니다..", get_golds);
+		Sleep(1000);
+		system("cls");
+		weapon_interface();
+		printf("\n팔면 %d골드가 나옵니다. 파는 중입니다...", get_golds);
+		Sleep(1000);
+		Data[0] = 0;
+		Data[1] = Data[1] + get_golds;
+	}
 	reinforce_interface();
+}
+int boss()
+{
+
+}
+int get_gold()
+{
+
 }
 int turn_off()
 {
@@ -339,7 +371,6 @@ int turn_off()
 int reinforce_5()
 {
 	int Fates_dice = rand() % (1000 + 1);
-	printf("%d", Fates_dice);
 	switch (Data[0])
 	{
 	case 0:
@@ -423,7 +454,6 @@ int reinforce_5()
 int reinforce_11()
 {
 	int Fates_dice = rand() % (1000 + 1);
-	printf("%d", Fates_dice);
 	switch (Data[0])
 	{
 	case 6:
@@ -523,11 +553,174 @@ int reinforce_11()
 }
 int reinforce_16()
 {
-
+	int Fates_dice = rand() % (1000 + 1);
+	switch (Data[0])
+	{
+	case 12:
+		if (Fates_dice < 351)
+		{
+			Data[0]++;
+			if (Fates_dice < 100)
+				get_auto_Enchant();
+			else
+				reinforce_success();
+		}
+		else if (Fates_dice < 401)
+		{
+			effect_off_reinforce_broken();
+		}
+		else
+		{
+			Data[0]--;
+			reinforce_fail();
+		}
+		break;
+	case 13:
+		if (Fates_dice < 351)
+		{
+			Data[0]++;
+			if (Fates_dice < 100)
+				get_auto_Enchant();
+			else
+				reinforce_success();
+		}
+		else if (Fates_dice < 411)
+		{
+			effect_off_reinforce_broken();
+		}
+		else
+		{
+			Data[0]--;
+			reinforce_fail();
+		}
+		break;
+	case 14:
+		if (Fates_dice < 351)
+		{
+			Data[0]++;
+			if (Fates_dice < 100)
+				get_auto_Enchant();
+			else
+				reinforce_success();
+		}
+		else if (Fates_dice < 421)
+		{
+			effect_off_reinforce_broken();
+		}
+		else
+		{
+			Data[0]--;
+			reinforce_fail();
+		}
+		break;
+	case 15:
+		if (Fates_dice < 351)
+		{
+			Data[0]++;
+			if (Fates_dice < 100)
+				get_auto_Enchant();
+			else
+				reinforce_success();
+		}
+		else if (Fates_dice < 431)
+		{
+			effect_off_reinforce_broken();
+		}
+		else
+		{
+			Data[0]--;
+			reinforce_fail();
+		}
+		break;
+	case 16:
+		if (Fates_dice < 351)
+		{
+			Data[0]++;
+			if (Fates_dice < 100)
+				get_auto_Enchant();
+			else
+				reinforce_success();
+		}
+		else if (Fates_dice < 441)
+		{
+			effect_off_reinforce_broken();
+		}
+		else
+		{
+			Data[0]--;
+			reinforce_fail();
+		}
+		break;
+	case 17:
+		if (Fates_dice < 351)
+		{
+			Data[0]++;
+			if (Fates_dice < 100)
+				get_auto_Enchant();
+			else
+				effect_off_reinforce_success();
+		}
+		else if (Fates_dice < 451)
+		{
+			effect_off_reinforce_broken();
+		}
+		else
+		{
+			Data[0]--;
+			effect_off_reinforce_fail();
+		}
+		break;
+	default:
+		break;
+	}
 }
+
 int reinforce_20()
 {
-
+	int Fates_dice = rand() % (1000 + 1);
+	switch (Data[0])
+	{
+	case 18:
+		if (Fates_dice < 301)
+		{
+			Data[0]++;
+			if (Fates_dice < 100)
+				get_auto_Enchant();
+			else
+				reinforce_success();
+		}
+		else if (Fates_dice < 401)
+		{
+			effect_off_reinforce_broken();
+		}
+		else
+		{
+			Data[0]--;
+			reinforce_fail();
+		}
+		break;
+	case 19:
+		if (Fates_dice < 301)
+		{
+			Data[0]++;
+			if (Fates_dice < 100)
+				get_auto_Enchant();
+			else
+				reinforce_success();
+		}
+		else if (Fates_dice < 401)
+		{
+			effect_off_reinforce_broken();
+		}
+		else
+		{
+			Data[0]--;
+			reinforce_fail();
+		}
+		break;
+	default:
+		break;
+	}
 }
 int reinforce_success()
 {
@@ -574,13 +767,11 @@ int reinforce()
 	int attempt = 0;
 
 	printf("\n\n**강화 내용**\n\n");
-	if(Data[1]<50)
+	
+	if(Data[4] == 0)
 	{
-		printf("골드가 부족합니다."); 
-	}
-	while (Data[0]<12 && Data[1]>49)
+		while (Data[0]<12)
 	{
-		Data[1] = Data[1] - 50;
 		Fates_dice = rand() % (1000 + 1);
 		attempt++;
 		switch (Data[0])
@@ -658,10 +849,98 @@ int reinforce()
 
 		}
 		printf("\n현재 강화 단계 : %d\n", Data[0]);
-	
+
 	}
 	Fates_dice = 0;
 	return attempt;
+	}
+	
+	else
+	{
+		while (Data[0]<12)
+	{
+		Fates_dice = rand() % (1000 + 1);
+		attempt++;
+		switch (Data[0])
+		{
+		case 0:
+			if (Fates_dice < 850)
+				Data[0]++;
+			break;
+
+		case 1:
+			if (Fates_dice < 800)
+				Data[0]++;
+			break;
+
+		case 2:
+			if (Fates_dice < 750)
+				Data[0]++;
+			break;
+
+		case 3:
+			if (Fates_dice < 700)
+				Data[0]++;
+			break;
+
+		case 4:
+			if (Fates_dice < 600)
+				Data[0]++;
+			break;
+
+		case 5:
+			if (Fates_dice < 550)
+				Data[0]++;
+			break;
+
+		case 6:
+			if (Fates_dice < 450)
+				Data[0]++;
+			else
+				Data[0]--;
+			break;
+
+		case 7:
+			if (Fates_dice < 400)
+				Data[0]++;
+			else
+				Data[0]--;
+			break;
+
+		case 8:
+			if (Fates_dice < 350)
+				Data[0]++;
+			else
+				Data[0]--;
+			break;
+		case 9:
+			if (Fates_dice < 325)
+				Data[0]++;
+			else
+				Data[0]--;
+			break;
+		case 10:
+			if (Fates_dice < 300)
+				Data[0]++;
+			else
+				Data[0]--;
+			break;
+		case 11:
+			if (Fates_dice < 250)
+				Data[0]++;
+			else
+				Data[0]--;
+			break;
+		default:
+			break;
+
+		}
+		printf("\n현재 강화 단계 : %d\n", Data[0]);
+
+	}
+	Fates_dice = 0;
+	return attempt;
+	}
 }
 
 int gacha()
@@ -723,6 +1002,10 @@ int setting()
 			Data[1] = 2000;
 			Data[2] = 0;
 			Data[3] = 0;
+			Data[4] = 0;
+			Data[5] = 0;
+			Data[6] = 0;
+			
 
 			Sleep(2000);
 			save();
@@ -760,34 +1043,50 @@ int effect_off_user_reinforce()
 
 	_getch();
 
-	if (Data[1]<150)
+	if (Data[1]<150 && Data[5]<150)
 	{
 		printf("\n\n\n ※골드가 부족합니다.");
 		_getch();
 		reinforce_interface();
-	} 
+	}
 	else if (Data[0] < 6)
 	{
 		effect_off_reinforce_5();
-		Data[1] = Data[1] - 150;
+		if(Data[1]>149)
+			Data[1] = Data[1] - 150;
+		if(Data[5]>149 && Data[1]<150)
+			Data[5] = Data[5] - 150;
+		Data[6]++;
 	}
 
 	else if (Data[0] < 12)
 	{
 		effect_off_reinforce_11();
-		Data[1] = Data[1] - 150;
+		if(Data[1]>149)
+			Data[1] = Data[1] - 150;
+		if(Data[5]>149 && Data[1]<150)
+			Data[5] = Data[5] - 150;
+		Data[6]++;
 
 	}
 	else if (Data[0] < 17)
 	{
 		effect_off_reinforce_16();
-		Data[1] = Data[1] - 150;
+		if(Data[1]>149)
+			Data[1] = Data[1] - 150;
+		if(Data[5]>149 && Data[1]<150)
+			Data[5] = Data[5] - 150;
+		Data[6]++;
 	}
 
 	else if (Data[0] < 20)
 	{
 		effect_off_reinforce_20();
-		Data[1] = Data[1] - 150;
+		if(Data[1]>149)
+			Data[1] = Data[1] - 150;
+		if(Data[5]>149 && Data[1]<150)
+			Data[5] = Data[5] - 150;
+		Data[6]++;
 	}
 
 	else if (Data[0] >= 20)
@@ -815,7 +1114,6 @@ int effect_off_user_reinforce()
 int effect_off_reinforce_5()
 {
 	int Fates_dice = rand() % (1000 + 1);
-	printf("%d", Fates_dice);
 	switch (Data[0])
 	{
 	case 0:
@@ -899,7 +1197,6 @@ int effect_off_reinforce_5()
 int effect_off_reinforce_11()
 {
 	int Fates_dice = rand() % (1000 + 1);
-	printf("%d", Fates_dice);
 	switch (Data[0])
 	{
 	case 6:
@@ -996,13 +1293,322 @@ int effect_off_reinforce_11()
 		break;
 	}
 }
+int bank()
+{
+	system("cls");
+	int input = 0;
+	int i = Data[6] % 10;
+	int j = Data[6] / 10;
+	
+	if(i != 0)
+	{
+		Data[5] = Data[5] + Data[5]*(j*0.3);
+	}
+	
+	printf("★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆\n");
+	printf("☆                                                                ★");  printf("\t\t대출한 금액 : %d 골드 : %d  저축 금액: %d\n", Data[4], Data[1], Data[5]);
+	printf("★                      은행에 오셨습니다.                        ☆\n");
+	printf("☆                  대출 및 저축이 가능합니다.                    ★\n");
+	printf("★   대출금액 반환시  대출 금액 + 대출금액의 10%c를 주셔야 합니다. ☆\n", '%');
+	printf("☆        저축 시에는 강화 횟수 10번당 3%c의 이자가 쌓입니다.      ★\n", '%');
+	printf("★             대출은 1번 || 저축은 2번 || 3번대출 상환           ☆\n");
+	printf("☆       ※ 빚이 있으면 자동 강화권의 강화 확률이 줄어 듭니다.    ★\n");
+	printf("★                                                                ☆\n");
+	printf("☆      강화 시 금액이 없을 경우 저축한 금액에서 빠져나갑니다.    ★\n");
+	printf("★                                                                ☆\n");	
+	printf("☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★\n");
+	
+	
+	
+	scanf("%d", &input);
+	switch(input)
+	{
+		case 1 : borrow(); break;
+		case 2 : saving(); break;
+		case 3 : return_borrow(); break; 
+		default : printf("\n\n잘못 입력하셨습니다."); Sleep(750); reinforce_interface(); break; 
+	}
+	
+}
+
+int borrow()
+{
+	int borrow_money = 0;
+	int input;
+	printf("\n\n\n 대출 창구입니다. 원하시는 금액을 입력후 엔터를 눌러주세요\n");
+	printf("         1회 대출 한도 금액은 5,000,000원 입니다.\n\n");
+	printf("대출 받을 돈 : ");
+	scanf("%d", &borrow_money);
+	
+	if(borrow_money<=5000000)
+	{
+		printf("대출 받으실 돈은 %d원 입니다. 정말 대출 하시겠습니까?\n", borrow_money);
+		printf("     맞으면 1번을 누르시고 엔터를 누르십시오.\n\n");
+		printf("대출 확인 번호 (1번을 누르시면 됩니다.) : ");
+		scanf("%d", &input);
+		
+		if(input == 1)
+		{
+			Data[4] = Data[4] + borrow_money+ borrow_money*0.1;
+			Data[1] = Data[1] + borrow_money;
+			reinforce_interface();
+			
+		}
+		else
+		{
+			printf("\n취소하셨습니다.");
+			Sleep(750);
+			getch();
+			bank();
+		}
+	}
+	else
+		{
+			printf("\n너무 큰 값을 입력 하셨습니다. 초기화면으로 갑니다.");
+			Sleep(750);
+			getch();
+			bank();
+		}
+}
+int saving()
+{
+	int money = 0; 
+	printf("\n\n\n 저축 창구 입니다. 현재 저축 금액은 %d원 입니다.\n", Data[5]);
+	printf("      강화횟수가 10의 배수가 되면 3%c의 이자가 쌓입니다.\n", '%');
+	printf("           현재 소지금은 %d원 입니다.\n",Data[1]);
+	
+	printf("저축할 금액 : ");
+	scanf("%d", &money);
+	
+	if(Data[1] < money)
+	{
+		printf("현재 소지 금액보다 큰 값입니다. 은행 초기화면으로 돌아갑니다.");
+		getch();
+		bank(); 
+	}
+	else if(Data[1] > money)
+	{
+		printf("%d원을 저축합니다.", money);
+		Data[1] = Data[1] - money;
+		Data[5] = Data[5] + money;
+		getch();
+		reinforce_interface();
+	}
+	else
+	{
+		printf("잘못 입력하셨습니다.");
+		getch();
+		bank(); 
+	}
+}
+int return_borrow()
+{
+	int return_money = 0;
+	int input;
+	printf("\n\n\n 대출 상환 창구입니다. 금액을 입력후 엔터를 눌러주세요\n");
+	printf("        1회 대출 한도 금액은 현재 대출 금액은 %d원 입니다.\n\n", Data[4]);
+	printf("상환 할 돈 : ");
+	scanf("%d", &return_money);
+	
+	if(return_money<=Data[4])
+	{
+		printf("               대출 상환 하실 돈은 %d원 입니다.\n", return_money);
+		printf("     남아 있는 상환 하실 돈은 %d원 으로 예상 됩니다.\n\n", Data[4]);
+		printf("             맞으면 1번을 누르시고 엔터를 누르십시오.\n\n");
+		printf("상환 확인 번호 (1번을 누르시면 됩니다.) : ");
+		scanf("%d", &input);
+		
+		if(input == 1)
+		{
+			Data[4] = Data[4] - return_money;
+			Data[1] = Data[1] - return_money;
+			reinforce_interface();
+		}
+		else
+		{
+			printf("\n취소하셨습니다.");
+			Sleep(750);
+			getch();
+			bank();
+		}
+	}
+	else
+		{
+			printf("\n너무 큰 값을 입력 하셨습니다. 은행 초기화면으로 갑니다.");
+			Sleep(750);
+			getch();
+			bank();
+		}
+}
 int effect_off_reinforce_16()
 {
-
+	int Fates_dice = rand() % (1000 + 1);
+	switch (Data[0])
+	{
+	case 12:
+		if (Fates_dice < 351)
+		{
+			Data[0]++;
+			if (Fates_dice < 100)
+				get_auto_Enchant();
+			else
+				effect_off_reinforce_success();
+		}
+		else if (Fates_dice < 401)
+		{
+			effect_off_reinforce_broken();
+		}
+		else
+		{
+			Data[0]--;
+			effect_off_reinforce_fail();
+		}
+		break;
+	case 13:
+		if (Fates_dice < 351)
+		{
+			Data[0]++;
+			if (Fates_dice < 100)
+				get_auto_Enchant();
+			else
+				effect_off_reinforce_success();
+		}
+		else if (Fates_dice < 411)
+		{
+			effect_off_reinforce_broken();
+		}
+		else
+		{
+			Data[0]--;
+			effect_off_reinforce_fail();
+		}
+		break;
+	case 14:
+		if (Fates_dice < 351)
+		{
+			Data[0]++;
+			if (Fates_dice < 100)
+				get_auto_Enchant();
+			else
+				effect_off_reinforce_success();
+		}
+		else if (Fates_dice < 421)
+		{
+			effect_off_reinforce_broken();
+		}
+		else
+		{
+			Data[0]--;
+			effect_off_reinforce_fail();
+		}
+		break;
+	case 15:
+		if (Fates_dice < 351)
+		{
+			Data[0]++;
+			if (Fates_dice < 100)
+				get_auto_Enchant();
+			else
+				effect_off_reinforce_success();
+		}
+		else if (Fates_dice < 431)
+		{
+			effect_off_reinforce_broken();
+		}
+		else
+		{
+			Data[0]--;
+			effect_off_reinforce_fail();
+		}
+		break;
+	case 16:
+		if (Fates_dice < 351)
+		{
+			Data[0]++;
+			if (Fates_dice < 100)
+				get_auto_Enchant();
+			else
+				effect_off_reinforce_success();
+		}
+		else if (Fates_dice < 441)
+		{
+			effect_off_reinforce_broken();
+		}
+		else
+		{
+			Data[0]--;
+			effect_off_reinforce_fail();
+		}
+		break;
+	case 17:
+		if (Fates_dice < 351)
+		{
+			Data[0]++;
+			if (Fates_dice < 100)
+				get_auto_Enchant();
+			else
+				effect_off_reinforce_success();
+		}
+		else if (Fates_dice < 451)
+		{
+			effect_off_reinforce_broken();
+		}
+		else
+		{
+			Data[0]--;
+			effect_off_reinforce_fail();
+		}
+		break;
+	default:
+		break;
+	}
 }
 int effect_off_reinforce_20()
 {
-
+	int Fates_dice = rand() % (1000 + 1);
+	switch (Data[0])
+	{
+	case 18:
+		if (Fates_dice < 301)
+		{
+			Data[0]++;
+			if (Fates_dice < 100)
+				get_auto_Enchant();
+			else
+				effect_off_reinforce_success();
+		}
+		else if (Fates_dice < 401)
+		{
+			effect_off_reinforce_broken();
+		}
+		else
+		{
+			Data[0]--;
+			effect_off_reinforce_fail();
+		}
+		break;
+	case 19:
+		if (Fates_dice < 301)
+		{
+			Data[0]++;
+			if (Fates_dice < 100)
+				get_auto_Enchant();
+			else
+				effect_off_reinforce_success();
+		}
+		else if (Fates_dice < 401)
+		{
+			effect_off_reinforce_broken();
+		}
+		else
+		{
+			Data[0]--;
+			effect_off_reinforce_fail();
+		}
+		break;
+	default:
+		break;
+	}
 }
 
 int effect_off_reinforce_success()
@@ -1028,6 +1634,23 @@ int effect_off_reinforce_fail()
 	printf("└────────────┘\n");
 	_getch();
 
+}
+
+int effect_off_reinforce_broken()
+{
+	system("cls");
+
+	printf("〔  무기가 강한 힘을 이기지 못하고 파괴되었습니다. 100골드로 무기를 살 수 있습니다. 〕");
+	if (Data[1]>100)
+	{
+		Data[0] = 9;
+		Data[1] = Data[1] - 100;
+	}
+	else
+	{
+		bank();
+		effect_off_reinforce_broken();
+	}
 }
 int get_auto_Enchant()
 {
