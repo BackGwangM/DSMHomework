@@ -66,11 +66,9 @@ int reinforce_interface()
 	printf("☆         2번 자동 강화 아이템 사용          ★\n");
 	printf("★        3번 지금까지의 데이터를 저장        ☆\n");
 	printf("☆      4번 현재 자신의 무기 확인, 경매소     ★\n");
-	printf("★             5번 보스와의 대련              ☆\n");
-	printf("☆               6번 골드 획득                ★\n");
-	printf("★               7번 게임 종료                ☆\n");
-	printf("☆               8번 확률 확인                ★\n");
-	printf("★              9번 무기 초기화               ☆\n");
+	printf("★               5번 게임 종료                ☆\n");
+	printf("☆               6번 확률 확인                ★\n");
+	printf("★              7번 무기 초기화               ☆\n");
 	printf("☆                 0번 설정                   ★\n");
 	printf("★   번호를 입력하시고 엔터를 눌러주세요.     ☆\n");
 	printf("☆                                            ★\n");
@@ -91,13 +89,9 @@ int reinforce_interface()
 	case '3': save(); break;
 
 	case '4': weapon(); break;
-
-	case '5': boss(); break;
-
-	case '6': get_gold(); break;
-	case '7': turn_off(); break;
-	case '8': gacha(); break;
-	case '9': Data[0] = 0; reinforce_interface(); break;
+	case '5': turn_off(); break;
+	case '6': gacha(); break;
+	case '7': Data[0] = 0; reinforce_interface(); break;
 	case '0': setting(); break;
 
 	default:
@@ -199,7 +193,7 @@ int auto_reinforce()
 	printf("★         강화하다가 나온 자동강화권을 사용할 수 있습니다.       ☆\n");
 	printf("☆            강화 중 특별한 아이템이 나오지 않습니다.            ★\n");
 	printf("★                 12강까지 강화 할 수 있습니다.                  ☆\n");
-	printf("☆         한 번 시도시 자동강화권과 10골드가 사용됩니다.         ★\n");
+	printf("☆         자동강화권과 자동강화 횟수당 50골드가 사용됩니다.      ★\n");
 	printf("★               강화를 하시려면 엔터를 눌러주세요!               ☆\n");
 	printf("☆           현재 강화 단계 : %d       자동강화권 : %d              ★\n", Data[0], Data[3]);
 	printf("★                                                                ☆\n");
@@ -336,14 +330,6 @@ int weapon()
 			Data[1] = Data[1] + get_golds;
 		}
 	reinforce_interface();
-}
-int boss()
-{
-
-}
-int get_gold()
-{
-
 }
 int turn_off()
 {
@@ -588,8 +574,13 @@ int reinforce()
 	int attempt = 0;
 
 	printf("\n\n**강화 내용**\n\n");
-	while (Data[0]<12)
+	if(Data[1]<50)
 	{
+		printf("골드가 부족합니다."); 
+	}
+	while (Data[0]<12 && Data[1]>49)
+	{
+		Data[1] = Data[1] - 50;
 		Fates_dice = rand() % (1000 + 1);
 		attempt++;
 		switch (Data[0])
@@ -667,7 +658,7 @@ int reinforce()
 
 		}
 		printf("\n현재 강화 단계 : %d\n", Data[0]);
-
+	
 	}
 	Fates_dice = 0;
 	return attempt;
