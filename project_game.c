@@ -29,14 +29,12 @@ int Data[7] = { 0, 2000, 0, 0, 0, 0, 0};			//°­È­, °ñµå, ÀÌÆåÆ® on/off, ÀÚµ¿ °­È
 
 int main(void)
 {
-
 	FILE *fp = fopen("save.dat", "rb");
 	if (fp == NULL) {
 		start();
 	}
 	fread(&Data, sizeof(Data), 1, fp);
 	fclose(fp);
-
 	start();
 }
 
@@ -58,15 +56,15 @@ int start()
 
 int reinforce_interface()
 {
+	
 	char menu;
-
 	system("cls");
-	printf("¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù\n");
-	printf("¡Ù                                            ¡Ú\n");
-	printf("¡Ú              1¹ø Á÷Á¢ °­È­                 ¡Ù\n");
-	printf("¡Ù         2¹ø ÀÚµ¿ °­È­ ¾ÆÀÌÅÛ »ç¿ë          ¡Ú\n");
-	printf("¡Ú        3¹ø Áö±Ý±îÁöÀÇ µ¥ÀÌÅÍ¸¦ ÀúÀå        ¡Ù\n");
-	printf("¡Ù      4¹ø ÇöÀç ÀÚ½ÅÀÇ ¹«±â È®ÀÎ, °æ¸Å¼Ò     ¡Ú\n");
+	printf("¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù"); printf("----------------------------ÇöÀç ´ç½ÅÀÇ »óÅÂ----------------------------\n");
+	printf("¡Ù                                            ¡Ú"); printf("\t°­È­ »óÅÂ\t%d\t||\t\t°ñµå\t%d\n", Data[0], Data[1]);
+	printf("¡Ú              1¹ø Á÷Á¢ °­È­                 ¡Ù"); printf("\tÀÚµ¿ °­È­±Ç\t%d\t||\t\n", Data[3], Data[4]);
+	printf("¡Ù         2¹ø ÀÚµ¿ °­È­ ¾ÆÀÌÅÛ »ç¿ë          ¡Ú\n"); 
+	printf("¡Ú        3¹ø Áö±Ý±îÁöÀÇ µ¥ÀÌÅÍ¸¦ ÀúÀå        ¡Ù"); printf("-------------------------------ÀºÇà ÇöÈ²--------------------------------\n");
+	printf("¡Ù                4¹ø °æ¸ÅÀå                  ¡Ú"); printf("\t´ëÃâ\t%d\t\t||\t\t¿¹±Ý\t%d\n", Data[4], Data[5]);
 	printf("¡Ú            5¹ø ÀºÇà ´ëÃâ, ÀúÃà             ¡Ù\n");
 	printf("¡Ù               6¹ø È®·ü È®ÀÎ                ¡Ú\n");
 	printf("¡Ú              7¹ø ¹«±â ÃÊ±âÈ­               ¡Ù\n");
@@ -113,6 +111,14 @@ int user_reinforce()
 {
 	char input1;
 	char input2;
+	int i = Data[6] % 10;
+	int j = Data[6] / 10;
+	
+	if(i != 0)
+	{
+		Data[5] = Data[5] + Data[5]*(j*0.3);
+		Data[6] = 0;
+	}
 	system("cls");
 
 	printf("¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù\n");
@@ -122,7 +128,7 @@ int user_reinforce()
 	printf("¡Ú               12°­ ºÎÅÍ´Â ÆÄ±«È®·üÀÌ »ý±é´Ï´Ù.                 ¡Ù\n");
 	printf("¡Ù   ÆÄ±«½Ã¿¡´Â 100°ñµå¸¦ ÁÖ°í 9°­ºÎÅÍ ´Ù½Ã °­È­ ÇÒ ¼ö ÀÖ½À´Ï´Ù.  ¡Ú\n");
 	printf("¡Ú              °­È­¸¦ ÇÏ½Ã·Á¸é ¾Æ¹«°Å³ª ´©¸£¼¼¿ä                 ¡Ù\n");
-	printf("¡Ù                  ÇöÀç °­È­ : %d °ñµå : %d                     ¡Ú\n", Data[0], Data[1]);
+	printf("¡Ù             ÇöÀç °­È­ : %d °ñµå : %d ÀúÃà : %d              ¡Ú\n", Data[0], Data[1], Data[5]);
 	printf("¡Ú                                                                ¡Ù\n");
 	printf("¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú\n");
 
@@ -207,13 +213,14 @@ int user_reinforce()
 int auto_reinforce()
 {
 	int i = 0;
+	int input = 0;
 	system("cls");
 
 	printf("¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù\n");
 	printf("¡Ù                                                                ¡Ú\n");
 	printf("¡Ú         °­È­ÇÏ´Ù°¡ ³ª¿Â ÀÚµ¿°­È­±ÇÀ» »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.       ¡Ù\n");
 	printf("¡Ù            °­È­ Áß Æ¯º°ÇÑ ¾ÆÀÌÅÛÀÌ ³ª¿ÀÁö ¾Ê½À´Ï´Ù.            ¡Ú\n");
-	printf("¡Ú                 12°­±îÁö °­È­ ÇÒ ¼ö ÀÖ½À´Ï´Ù.                  ¡Ù\n");
+	printf("¡Ú                 20°­±îÁö °­È­ ÇÒ ¼ö ÀÖ½À´Ï´Ù.                  ¡Ù\n");
 	printf("¡Ù         ÇÑ ¹ø ½Ãµµ½Ã ÀÚµ¿°­È­±Ç°ú 10°ñµå°¡ »ç¿ëµË´Ï´Ù.         ¡Ú\n");
 	printf("¡Ú               °­È­¸¦ ÇÏ½Ã·Á¸é ¿£ÅÍ¸¦ ´­·¯ÁÖ¼¼¿ä!               ¡Ù\n");
 	printf("¡Ù           ÇöÀç °­È­ ´Ü°è : %d       ÀÚµ¿°­È­±Ç : %d              ¡Ú\n", Data[0], Data[3]);
@@ -229,7 +236,9 @@ int auto_reinforce()
 	if (Data[3] != 0)
 	{
 		Data[3]--;
-		i = reinforce();
+		printf("\n\n¿øÇÏ½Ã´Â °­È­ ¼öÄ¡ : ");
+		scanf("%d", &input);
+		i = reinforce(input);
 		printf("%d", i);
 
 		_getch();
@@ -290,7 +299,7 @@ int weapon()
 
 	char input;
 	int get_golds;
-	int Fates_dice = rand() % (150 + 1);
+	int Fates_dice = rand() % (400 + 1);
 
 	system("cls");
 
@@ -298,15 +307,15 @@ int weapon()
 
 	_getch();
 
-	get_golds = (120 * Data[0]) + (Fates_dice*Data[0]);
+	get_golds = (140 * Data[0]) + (Fates_dice*Data[0]);
 
-	if (Fates_dice<51 && Data[0] != 0)
+	if (Fates_dice<100 && Data[0] != 0)
 	{
 		printf("\n\n°æ¸ÅÀåÀÇ »óÀÎµéÀÌ ´ç½ÅÀÇ ¹«±â¿¡ °ü½ÉÀÌ ¾ø½À´Ï´Ù.\n\n");
 		printf("»ç¸®½º || °æ¸ÅÀå °ü¸®\n");
 		printf("»ì »ç¶÷µµ ¾ø´Â °Í °°Àºµ¥ ÀÌ¸¸ Àå»ç Á¢Áö ±×·¡?\n");
 	}
-	else if (Fates_dice<101 && Data[0] != 0)
+	else if (Fates_dice<350 && Data[0] != 0)
 	{
 		printf("\n\n°æ¸ÅÀåÀÇ »óÀÎµéÀÌ ´ç½ÅÀÇ ¹«±â°¡ ±×·°Àú·° ÀÌ¶ó°í ¸»ÇÕ´Ï´Ù.\n\n");
 		printf("Àª¸® || »óÀÎ\n");
@@ -314,7 +323,7 @@ int weapon()
 	}
 
 
-	else if (Fates_dice<151 && Data[0] != 0)
+	else if (Fates_dice<401 && Data[0] != 0)
 	{
 		printf("\n\n°æ¸ÅÀåÀÇ »óÀÎµé ¸ðµÎ°¡ ´ç½ÅÀÇ ¹«±â¸¦ »ç°í ½Í¾î ÇÕ´Ï´Ù.\n\n");
 		printf("¿ÀÇÊ¸®¾Æ || È®·ü °­È­ÀÇ ¸íÀÎ\n");
@@ -354,14 +363,6 @@ int weapon()
 		Data[1] = Data[1] + get_golds;
 	}
 	reinforce_interface();
-}
-int boss()
-{
-
-}
-int get_gold()
-{
-
 }
 int turn_off()
 {
@@ -761,7 +762,7 @@ int reinforce_fail()
 
 }
 
-int reinforce()
+int reinforce(int re)
 {
 	int Fates_dice;
 	int attempt = 0;
@@ -770,10 +771,11 @@ int reinforce()
 	
 	if(Data[4] == 0)
 	{
-		while (Data[0]<12)
+		while (Data[0]<re && Data[1]>9)
 	{
 		Fates_dice = rand() % (1000 + 1);
 		attempt++;
+		Data[1] = Data[1]-10;
 		switch (Data[0])
 		{
 		case 0:
@@ -844,9 +846,113 @@ int reinforce()
 			else
 				Data[0]--;
 			break;
+		case 12:
+		if (Fates_dice < 351)
+			Data[0]++;
+		else if (Fates_dice < 401)
+		{
+			effect_off_reinforce_broken();
+			break;
+		}
+			
+		else
+			Data[0]--;
+		break;
+	case 13:
+		if (Fates_dice < 351)
+			Data[0]++;
+		else if (Fates_dice < 411)	
+		{
+			effect_off_reinforce_broken();
+			break;
+		}
+		else
+			Data[0]--;
+		break;
+	case 14:
+		if (Fates_dice < 351)
+			Data[0]++;
+		else if (Fates_dice < 421)
+		{
+			effect_off_reinforce_broken();
+			break;
+		}
+		else
+			Data[0]--;
+		break;
+	case 15:
+		if (Fates_dice < 351)
+			Data[0]++;
+		else if (Fates_dice < 431)
+		{
+			effect_off_reinforce_broken();
+			break;
+		}
+		else
+		{
+			Data[0]--;
+		}
+		break;
+	case 16:
+		if (Fates_dice < 351)
+		{
+			Data[0]++;
+		}
+		else if (Fates_dice < 441)
+		{
+			effect_off_reinforce_broken();
+			break;
+		}
+		else
+			Data[0]--;
+		break;
+	case 17:
+		if (Fates_dice < 351)
+		{
+			Data[0]++;
+		}
+		else if (Fates_dice < 451)
+		{
+			effect_off_reinforce_broken();
+			break;
+		}
+		else
+		{
+			Data[0]--;
+		}
+		break;
+	case 18:
+		if (Fates_dice < 301)
+		{
+			Data[0]++;
+		}
+		else if (Fates_dice < 401)
+		{
+			effect_off_reinforce_broken();
+			break;
+		}
+		else
+		{
+			Data[0]--;
+		}
+		break;
+	case 19:
+		if (Fates_dice < 301)
+		{
+			Data[0]++;
+		}
+		else if (Fates_dice < 401)
+		{
+			effect_off_reinforce_broken();
+			break;
+		}
+		else
+		{
+			Data[0]--;
+		}
+		break;
 		default:
 			break;
-
 		}
 		printf("\nÇöÀç °­È­ ´Ü°è : %d\n", Data[0]);
 
@@ -857,7 +963,7 @@ int reinforce()
 	
 	else
 	{
-		while (Data[0]<12)
+		while (Data[0]<re)
 	{
 		Fates_dice = rand() % (1000 + 1);
 		attempt++;
@@ -931,6 +1037,118 @@ int reinforce()
 			else
 				Data[0]--;
 			break;
+		case 12:
+		if (Fates_dice < 301)
+		{
+			Data[0]++;
+		}
+		else if (Fates_dice < 351)
+		{
+			effect_off_reinforce_broken();
+		}
+		else
+		{
+			Data[0]--;
+		}
+		break;
+	case 13:
+		if (Fates_dice < 301)
+		{
+			Data[0]++;
+		}
+		else if (Fates_dice < 361)
+		{
+			effect_off_reinforce_broken();
+			break;
+		}
+		else
+		{
+			Data[0]--;
+		}
+		break;
+	case 14:
+		if (Fates_dice < 301)
+		{
+			Data[0]++;
+		}
+		else if (Fates_dice < 371)
+		{
+			effect_off_reinforce_broken();
+		}
+		else
+		{
+			Data[0]--;
+		}
+		break;
+	case 15:
+		if (Fates_dice < 301)
+		{
+			Data[0]++;
+		}
+		else if (Fates_dice < 381)
+		{
+			effect_off_reinforce_broken();
+		}
+		else
+		{
+			Data[0]--;
+		}
+		break;
+	case 16:
+		if (Fates_dice < 301)
+		{
+			Data[0]++;
+		}
+		else if (Fates_dice < 391)
+		{
+			effect_off_reinforce_broken();
+		}
+		else
+		{
+			Data[0]--;
+		}
+		break;
+	case 17:
+		if (Fates_dice < 301)
+		{
+			Data[0]++;
+		}
+		else if (Fates_dice < 401)
+		{
+			effect_off_reinforce_broken();
+		}
+		else
+		{
+			Data[0]--;
+		}
+		case 18:
+		if (Fates_dice < 251)
+		{
+			Data[0]++;
+		}
+		else if (Fates_dice < 351)
+		{
+			effect_off_reinforce_broken();
+		}
+		else
+		{
+			Data[0]--;
+		}
+		break;
+	case 19:
+		if (Fates_dice < 251)
+		{
+			Data[0]++;
+		}
+		else if (Fates_dice < 351)
+		{
+			effect_off_reinforce_broken();
+		}
+		else
+		{
+			Data[0]--;
+		}
+		break;
 		default:
 			break;
 
@@ -967,6 +1185,7 @@ int setting()
 	printf("¦£¦¡¦¡¦¡¦¡¦¡¦¡¼³Á¤¦¡¦¡¦¡¦¡¦¡¦¡¦¤\n");
 	printf("¦¢   1. °­È­ ÀÌÆåÆ® on/off    ¦¢\n");
 	printf("¦¢         2. ÃÊ±âÈ­          ¦¢\n");
+	printf("¦¢ 3. ¼¼ÀÌºê µ¥ÀÌÅÍ ºÒ·¯¿À±â  ¦¢\n");
 	printf("¦¢      ¹øÈ£¸¦ ´­·¯ÁÖ¼¼¿ä     ¦¢\n");
 	printf("¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥\n");
 
@@ -1017,6 +1236,26 @@ int setting()
 			Sleep(2000);
 			reinforce_interface();
 		}
+		case '3' :
+		{
+			printf("\n\n3ÃÊµÚ ¼¼ÀÌºê µ¥ÀÌÅÍ¸¦ ºÒ·¯¿É´Ï´Ù.\n");
+			Sleep(1000);
+			printf("\n2ÃÊµÚ ¼¼ÀÌºê µ¥ÀÌÅÍ¸¦ ºÒ·¯¿É´Ï´Ù.\n");
+			Sleep(1000);
+			printf("\n1ÃÊµÚ ¼¼ÀÌºê µ¥ÀÌÅÍ¸¦ ºÒ·¯¿É´Ï´Ù.\n");
+			Sleep(1000);
+			FILE *fp = fopen("save.dat", "rb");
+			if (fp == NULL) {
+			printf("¿Ï·á µÇ¾ú½À´Ï´Ù.");
+			getch();
+			start();
+			}
+			fread(&Data, sizeof(Data), 1, fp);
+			fclose(fp);
+			printf("¿Ï·á µÇ¾ú½À´Ï´Ù.");
+			getch();
+			start();
+		} 
 	default:
 		reinforce_interface();
 		break;
@@ -1028,6 +1267,14 @@ int setting()
 int effect_off_user_reinforce()
 {
 	char input;
+	int i = Data[6] % 10;
+	int j = Data[6] / 10;
+	
+	if(i != 0)
+	{
+		Data[5] = Data[5] + Data[5]*(j*0.3);
+		Data[6] = 0;
+	}
 	system("cls");
 
 	printf("¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù\n");
@@ -1037,7 +1284,7 @@ int effect_off_user_reinforce()
 	printf("¡Ú               12°­ ºÎÅÍ´Â ÆÄ±«È®·üÀÌ »ý±é´Ï´Ù.                 ¡Ù\n");
 	printf("¡Ù   ÆÄ±«½Ã¿¡´Â 100°ñµå¸¦ ÁÖ°í 9°­ºÎÅÍ ´Ù½Ã °­È­ ÇÒ ¼ö ÀÖ½À´Ï´Ù.  ¡Ú\n");
 	printf("¡Ú            °­È­¸¦ ÇÏ½Ã·Á¸é ¿£ÅÍ¸¦ ´­·¯ÁÖ¼¼¿ä!                  ¡Ù\n");
-	printf("¡Ù                  ÇöÀç °­È­ : %d °ñµå : %d                     ¡Ú\n", Data[0], Data[1]);
+	printf("¡Ù             ÇöÀç °­È­ : %d °ñµå : %d ÀúÃà : %d                 ¡Ú\n", Data[0], Data[1], Data[5]);
 	printf("¡Ú                                                                ¡Ù\n");
 	printf("¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú\n");
 
@@ -1273,6 +1520,7 @@ int effect_off_reinforce_11()
 			Data[0]--;
 			effect_off_reinforce_fail();
 		}
+		break;
 	case 11:
 		if (Fates_dice < 350)
 		{
@@ -1287,7 +1535,6 @@ int effect_off_reinforce_11()
 			Data[0]--;
 			effect_off_reinforce_fail();
 		}
-
 		break;
 	default:
 		break;
@@ -1297,13 +1544,7 @@ int bank()
 {
 	system("cls");
 	int input = 0;
-	int i = Data[6] % 10;
-	int j = Data[6] / 10;
 	
-	if(i != 0)
-	{
-		Data[5] = Data[5] + Data[5]*(j*0.3);
-	}
 	
 	printf("¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù¡Ú¡Ù\n");
 	printf("¡Ù                                                                ¡Ú");  printf("\t\t´ëÃâÇÑ ±Ý¾× : %d °ñµå : %d  ÀúÃà ±Ý¾×: %d\n", Data[4], Data[1], Data[5]);
@@ -1633,18 +1874,21 @@ int effect_off_reinforce_fail()
 	printf("¦¢     ÇöÀç °­È­ : %d      ¦¢\n", Data[0]);
 	printf("¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥\n");
 	_getch();
-
+	
+	
 }
 
 int effect_off_reinforce_broken()
 {
 	system("cls");
 
-	printf("¡²  ¹«±â°¡ °­ÇÑ ÈûÀ» ÀÌ±âÁö ¸øÇÏ°í ÆÄ±«µÇ¾ú½À´Ï´Ù. 100°ñµå·Î ¹«±â¸¦ »ì ¼ö ÀÖ½À´Ï´Ù. ¡³");
+	printf("¡²  ¹«±â°¡ °­ÇÑ ÈûÀ» ÀÌ±âÁö ¸øÇÏ°í ÆÄ±«µÇ¾ú½À´Ï´Ù. 100°ñµå·Î 9°­ÀÎ ¹«±â¸¦ »ì ¼ö ÀÖ½À´Ï´Ù. ¡³");
+	getch();
 	if (Data[1]>100)
 	{
 		Data[0] = 9;
 		Data[1] = Data[1] - 100;
+		reinforce_interface();
 	}
 	else
 	{
