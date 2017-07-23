@@ -14,6 +14,6 @@
 
 저는 이런 기업에 들어가고 싶습니다.
 -------------------
-[토스](https://toss.im/)
-[배달의 민족](http://www.baemin.com/)
-[마이다스아이티](http://www.midasit.com/)
+[토스](https://toss.im/)<br>
+[배달의 민족](http://www.baemin.com/)<br>
+[마이다스아이티](http://www.midasit.com/)<br>
